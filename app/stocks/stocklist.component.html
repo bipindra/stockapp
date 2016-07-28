@@ -1,0 +1,47 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        {{pageTitle}}
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2">Enter Stock Symbol</div>
+            <div class="col-md-2">
+                <input type="text" name="txtSymbol" [(ngModel)]="inputSymbol" />
+                <button type="button" class="btn btn-default" (click)="addSymbol()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button type="button" class="btn btn-default" (click)="refresh()">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="table table-responsive">
+                    <table class="table" *ngIf='stocks && stocks.length'>
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Name</th>
+                                <th>Bid</th>
+                                <th>Change</th>
+                                <th>Last Trade Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor='let stock of stocks' >
+                                <td>{{stock.symbol}} </td>
+                                <td>{{stock.Name}}</td>
+                                <td>{{stock.Bid}} </td>
+                                <td [class]="stock.Change>0?'success':'danger'">{{stock.ChangeinPercent}} </td>
+                                <td>{{stock.LastTradeDate}} </td>
+                                <td><span class="glyphicon glyphicon-remove" (click)="remove(stock.symbol)"></span>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
