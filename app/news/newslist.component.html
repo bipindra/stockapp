@@ -1,21 +1,19 @@
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        {{Name}} ({{Symbol}})
-    </div>
-    <div class="panel-body">
-        
-        <div class="row">
-            <br/>
-            <div class="col-md-12 col-lg-12">
-                <ul>
-                    <li *ngFor="let item of Items">
-                        <div><sup>{{item.Provider}}</sup><a href="{{item.Link}}">{{item.Title}}</a></div>
-                        <div>{{item.PubDate}}</div>
-                         <div [innerHTML]="item.Description"></div> 
-                    </li>
+<div class="row">
 
-                </ul>
-            </div>
+    <div class="col-md-12 col-lg-12">
+
+        <div class="list-group">
+            <a href="#" class="list-group-item disabled">
+                 {{Name}} ({{Symbol}})
+            </a>
+            <a href="{{item.Link}}" class="list-group-item" *ngFor="let item of Items">
+                <div><sup>{{item.Provider}}</sup><a>{{item.Title}}</a></div>
+                <div class="hidden-xs" >{{item.PubDate}}</div>
+                <div class="hidden-xs" [innerHTML]="item.Description"></div>
+            </a>
         </div>
+        
     </div>
+    
+    
 </div>

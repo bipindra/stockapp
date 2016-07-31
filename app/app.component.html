@@ -1,6 +1,17 @@
-<h1>{{pageTitle}}</h1>
-<nav class='nav navbar-nav'> 
-      <a routerLink="/" routerLinkActive="active">Home</a>
-</nav>
-
+<nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          
+          <a class="navbar-brand" routerLink="/" routerLinkActive="active" ><span>{{pageTitle}}</span></a>
+      
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a routerLink="/" routerLinkActive="active" ><span class="glyphicon glyphicon-home">Home</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+ <div class="container-fluid">
 <router-outlet></router-outlet>
+</div>
