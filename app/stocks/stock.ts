@@ -1,4 +1,17 @@
 
+
+export interface IStockQL{
+     query:IStockQLResponse;
+
+}
+export interface IStockQLResponse{
+     results:IStockQuote;
+}
+export interface IStockQuote{
+    quote:IStock[];
+}
+
+
 export interface IStock {
     symbol: string;
     Bid: number;

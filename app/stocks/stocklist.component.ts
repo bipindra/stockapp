@@ -1,11 +1,14 @@
 //@require "./**/*.html" 
 import { Component } from '@angular/core';
 import { StockService} from './stock.service';
-import { IStock } from './stock';
+import { IStock,IStockQL } from './stock';
+
+import { ROUTER_DIRECTIVES }  from '@angular/router';
 
 @Component({
     selector: 'stock-list',
     templateUrl: 'stocklist.component.html',
+    directives: [StockListComponent,ROUTER_DIRECTIVES],
     providers: [StockService]
 
 })
@@ -21,10 +24,14 @@ export class StockListComponent {
             if (a == this.inputSymbol)
                 return;
         }
-        this.symbols.push(this.inputSymbol);
+        var manySymbols = this.inputSymbol.split(',');
+        for(let s of manySymbols){
+            if(this.symbols.indexOf(s, 0)<0)
+                this.symbols.push(s);
+        }
         this.setSymbols();
         this.refresh();
-
+        this.inputSymbol = "";
     }
     inputSymbol: string = "";
 
@@ -33,9 +40,8 @@ export class StockListComponent {
     }
     loadSymbols(): void {
         var arr = window.localStorage["symbols"];
-        arr = !arr?"":arr;
+        arr = !arr?[]:arr;
         var newarr = arr instanceof Array ? arr : arr.split(",");
-   
         this.symbols =  newarr || [];
         this.refresh();
     }
@@ -46,25 +52,40 @@ export class StockListComponent {
     refresh(): void {
         if (this.symbols.length == 0) return;
         this._service.getStocks(this.symbols.join(","))
-            .subscribe((stocks) => {
-                for (let stock of stocks.query.results.quote) {
-                    var newStock = stock;
-                    var exists = false;
-                    for (let item of this.stocks) {
-                        if (item.symbol == newStock.symbol) {
-                            exists = true;
-                        }
+            .subscribe((stocks:IStockQL) => {
+                if(stocks && stocks.query && stocks.query.results && stocks.query.results.quote)
+                {
+                    var quotes = new Array();
+                    if( stocks.query.results.quote instanceof Array){
+                        quotes = stocks.query.results.quote;
                     }
-                    if (!exists)
-                        this.stocks.push(newStock);
+                    else{
+                        quotes.push(stocks.query.results.quote);
+                    }
+                    
+                    for (let stock of quotes) {
+                        var newStock = stock;
+                        var exists = false;
+                        for (let item of this.stocks) {
+                            if (item.symbol == newStock.symbol) {
+                                exists = true;
+                            }
+                        }
+                        if (!exists){
+                            this.stocks.push(newStock);
+                        }
+                        
+                    }
                 }
             },
-            error => this.errorMessage = <any>error);
+            (error:string) => this.errorMessage = <any>error);
     }
 
     remove(symbol: string): void {
+        var symbolarray = this.symbols;
         var index = this.symbols.indexOf(symbol, 0);
         if (index > -1) {
+            
             this.symbols.splice(index, 1);
             this.stocks.splice(index, 1);
         }

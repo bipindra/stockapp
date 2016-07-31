@@ -4,9 +4,9 @@
     </div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-2">Enter Stock Symbol</div>
-            <div class="col-md-2">
-                <input type="text" name="txtSymbol" [(ngModel)]="inputSymbol" />
+
+            <div class="col-lg-10 col-md-6 col-sm-10 col-xs-10">
+                <input type="text" name="txtSymbol" [(ngModel)]="inputSymbol" placeholder="Enter symbols" />
                 <button type="button" class="btn btn-default" (click)="addSymbol()">
                         <span class="glyphicon glyphicon-plus"></span>
                 </button>
@@ -16,27 +16,32 @@
             </div>
         </div>
         <div class="row">
+            <br/>
             <div class="col-md-12 col-lg-12">
                 <div class="table table-responsive">
                     <table class="table" *ngIf='stocks && stocks.length'>
                         <thead>
                             <tr>
                                 <th>Symbol</th>
-                                <th>Name</th>
+                                <th class="hidden-xs">Name</th>
                                 <th>Bid</th>
-                                <th>Change</th>
-                                <th>Last Trade Date</th>
+                                <th class="hidden-xs">% Change</th>
+
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor='let stock of stocks' >
-                                <td>{{stock.symbol}} </td>
-                                <td>{{stock.Name}}</td>
-                                <td>{{stock.Bid}} </td>
-                                <td [class]="stock.Change>0?'success':'danger'">{{stock.ChangeinPercent}} </td>
-                                <td>{{stock.LastTradeDate}} </td>
-                                <td><span class="glyphicon glyphicon-remove" (click)="remove(stock.symbol)"></span>
+                            <tr *ngFor='let stock of stocks'>
+                                <td [class]="stock.Change>0?'success':'danger'">{{stock.symbol}} </td>
+                                <td class="hidden-xs">{{stock.Name}} </td>
+                                <td [class]="stock.Change>0?'success':'danger'">{{stock.Bid}} </td>
+                                <td class="hidden-xs">{{stock.Change}} </td>
+                                <td>
+                                    <span class="glyphicon glyphicon-remove" (click)="remove(stock.symbol)"> </span>
+                                    <a routerLink="/stocks-details/{{stock.symbol}}" routerLinkActive="active" class="glyphicon glyphicon-plus"></a>
+
+                                </td>
+
                             </tr>
                         </tbody>
                     </table>
