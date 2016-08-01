@@ -16,4 +16,26 @@ import {NewsService} from './news/news.service';
 }) 
 export class AppComponent {
     pageTitle: string = 'Stocks Info';
+    searchActive:boolean;
+    inputSymbol:string;
+    constructor(){
+        this.inputSymbol = "";
+    }
+    searchClick(){
+        this.searchActive = !this.searchActive;
+        if(!this.searchActive){
+            var arr = window.localStorage["symbols"];
+            arr = !arr?[]:arr;
+            var newarr = arr instanceof Array ? arr : arr.split(",");
+            
+            var manySymbols = this.inputSymbol.split(',');
+            for(let s of manySymbols){
+                if(newarr.indexOf(s, 0)<0 && s!='')
+                    newarr.push(s);
+            }
+            window.localStorage["symbols"] = newarr;
+            this.inputSymbol = "";
+            console.log(window.localStorage["symbols"]);
+        }
+    }
 } 

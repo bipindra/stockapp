@@ -1,8 +1,7 @@
 //@require "./**/*.html" 
-import { Component } from '@angular/core';
+import { Component ,Input} from '@angular/core';
 import { StockService} from './stock.service';
 import { IStock,IStockQL } from './stock';
-
 import { ROUTER_DIRECTIVES }  from '@angular/router';
 
 @Component({
@@ -16,7 +15,7 @@ export class StockListComponent {
 
     constructor(private _service: StockService) {
         this.symbols = [];
-        this.loadSymbols();
+        //this.loadSymbols();
     }
     pageTitle: string = 'Stock List';
     addSymbol(): void {
@@ -33,7 +32,7 @@ export class StockListComponent {
         this.refresh();
         this.inputSymbol = "";
     }
-    inputSymbol: string = "";
+    @Input('symbol')  inputSymbol: string = "";
 
     setSymbols(): void {
         window.localStorage["symbols"] = this.symbols;
@@ -50,6 +49,7 @@ export class StockListComponent {
     errorMessage: string;
 
     refresh(): void {
+        //this.loadSymbols();
         if (this.symbols.length == 0) return;
         this._service.getStocks(this.symbols.join(","))
             .subscribe((stocks:IStockQL) => {
@@ -91,4 +91,20 @@ export class StockListComponent {
         }
         this.setSymbols();
     }
+    lastLoadedSymbols:string;
+    intHandle:any;
+    ngOnInit() {
+        this.intHandle=setInterval(()=>{
+            if(this.lastLoadedSymbols!=window.localStorage["symbols"]){
+                this.lastLoadedSymbols = window.localStorage["symbols"];
+                this.loadSymbols();
+                this.refresh();
+            }
+        },2000);
+    }
+
+    ngOnDestroy() {
+        clearInterval(this.intHandle);
+    }
+
 }
